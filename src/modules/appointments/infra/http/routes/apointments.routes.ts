@@ -1,5 +1,8 @@
 import { Router } from 'express';
+import { celebrate, Segments, Joi } from 'celebrate';
+
 import ensureAuthenticated from '@modules/users/infra/middlewares/ensureAuthenticated';
+
 import AppointmentsController from '../controllers/AppointmentsController';
 import ProviderAppointmentsController from '../controllers/ProviderAppointmentsController';
 
@@ -9,7 +12,16 @@ const providerAppointmentsController = new ProviderAppointmentsController();
 
 appointmentsRouter.use(ensureAuthenticated);
 
-appointmentsRouter.post('/', appointmentsController.create);
+appointmentsRouter.post(
+  '/',
+  celebrate({
+    [Segments.BODY]: {
+      provider_id: Joi.string().uuid().required(),
+      date: Joi.date(),
+    },
+  }),
+  appointmentsController.create,
+);
 appointmentsRouter.post('/me', providerAppointmentsController.index);
 
 export default appointmentsRouter;

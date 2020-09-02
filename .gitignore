@@ -1,3 +1,5 @@
 .vscode/
 tmp/*
 !tmp/.gitkeep
+.env
+ormconfig.json
