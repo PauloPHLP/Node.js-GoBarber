@@ -41,6 +41,8 @@ class CreateUserService {
       password: hashedPassword,
     });
 
+    await this.cacheProvider.invalidate('providers-list');
+
     return user;
   }
 }
